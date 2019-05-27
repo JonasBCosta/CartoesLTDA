@@ -10,20 +10,20 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
-//@Configuration
+@Configuration
 public class DBConnection {
 
-//	@Bean
+	@Bean
 	public DataSource dataSource(){
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://localhost:3306/transacao");
-		dataSource.setUsername("mysql");
-		dataSource.setPassword("password");
+		dataSource.setUrl("jdbc:mysql://sql10.freemysqlhosting.net/sql10293512");
+		dataSource.setUsername("sql10293512");
+		dataSource.setPassword("NR7WSa6Plb");
 		return dataSource;
 	}
 	
-//	@Bean
+	@Bean
 	public JpaVendorAdapter jpaVendorAdapter(){
 		HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
 		adapter.setDatabase(Database.MYSQL);
