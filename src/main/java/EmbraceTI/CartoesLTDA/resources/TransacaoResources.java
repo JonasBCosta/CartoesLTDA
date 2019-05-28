@@ -1,5 +1,10 @@
 package EmbraceTI.CartoesLTDA.resources;
 
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +39,12 @@ public class TransacaoResources {
 	@ApiOperation(value="Adiciona uma transação")
 	@PostMapping() // Cria o metodo POST
 	public Transacao CadastroTransacao(@RequestBody @Valid Transacao transacao){ // @Valid usará as validações para permitir o salvamento
+		// Pegar o NSU da transação e fazer alterações no BD
+		if(transacao.getModalidade().equals("debito"))
+			transacao.setLiquido(transacao.getValor()*0.98);
+		else
+			transacao.setLiquido(transacao.getValor()*0.97);
+		transacao.setDisponivel(calcDisponivel(transacao.getHorario()));
 		return tr.save(transacao); // fará somente se passar pela validação
 	}
 	
@@ -43,4 +54,26 @@ public class TransacaoResources {
 		tr.delete(transacao);
 		return transacao;
 	}
+	
+	 public static String calcDisponivel(String data){
+		 Calendar cal = Calendar.getInstance();
+		 DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale("pt", "BR"));
+	
+	     cal.set(Integer.parseInt(data.substring(0, 4)),
+	    		 Integer.parseInt(data.substring(5, 7))-1,
+	    		 Integer.parseInt(data.substring(8, 10)));
+	     df.setCalendar(cal);
+	
+		 for(int i=0; i < 30; i++){
+			 cal.add(Calendar.DAY_OF_MONTH, 1);
+			 if((cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) || (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY))
+				 i--;
+		 }
+	
+		 data = String.valueOf(cal.get(Calendar.YEAR)) + "-" + 
+				String.valueOf(String.format("%02d", cal.get(Calendar.MONTH))) + "-" + 
+				String.valueOf(String.format("%02d", cal.get(Calendar.DAY_OF_MONTH))) +
+				data.substring(10);
+		 return data;
+	 }
 }

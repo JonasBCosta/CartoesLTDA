@@ -1,5 +1,6 @@
 package EmbraceTI.CartoesLTDA.model;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -25,7 +26,9 @@ public class Transacao{
 	private long nsu;
 	
 	@NotNull
-	private float valor;
+	private double valor;
+	
+	private double liquido;
 	
 	@NotBlank
 	private String bandeira;
@@ -35,6 +38,8 @@ public class Transacao{
 	
 	@NotBlank
 	private String horario;
+	
+	private String disponivel;
 
 	public long getNsu() {
 		return nsu;
@@ -44,12 +49,13 @@ public class Transacao{
 		this.nsu = nsu;
 	}
 
-	public float getValor() {
+	public double getValor() {
 		return valor;
 	}
 
-	public void setValor(float valor) {
-		this.valor = valor;
+	public void setValor(double valor) {
+		DecimalFormat df = new DecimalFormat("#.##");      
+		this.valor = Double.valueOf(df.format(valor).replace(",", "."));
 	}
 
 	public String getBandeira() {
@@ -74,5 +80,22 @@ public class Transacao{
 
 	public void setHorario(String horario) {
 		this.horario = horario;
+	}
+
+	public double getLiquido() {
+		return liquido;
+	}
+
+	public void setLiquido(double liquido) {
+		DecimalFormat df = new DecimalFormat("#.##");      
+		this.liquido = Double.valueOf(df.format(liquido).replace(",", "."));
+	}
+
+	public String getDisponivel() {
+		return disponivel;
+	}
+
+	public void setDisponivel(String disponivel) {
+		this.disponivel = disponivel;
 	}
 }
